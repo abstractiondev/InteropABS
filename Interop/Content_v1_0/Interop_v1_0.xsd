@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 sp1 (http://www.altova.com) by Kalle Launiala (Citrus Solutions Oy) -->
+<xs:schema xmlns="http://tempuri.org/Interop_v1_0.xsd" xmlns:mstns="http://tempuri.org/Interop_v1_0.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://tempuri.org/Interop_v1_0.xsd" elementFormDefault="qualified" id="Interop_v1_0">
+	<xs:element name="InteropAbstraction" type="InteropAbstractionType">
+		<xs:key name="ServiceIdPK">
+			<xs:selector xpath="Services/Service"/>
+			<xs:field xpath="@serviceId"/>
+		</xs:key>
+		<xs:key name="ServiceNamePK">
+			<xs:selector xpath="Services/Service"/>
+			<xs:field xpath="@name"/>
+		</xs:key>
+		<xs:keyref name="ProfileServiceRef" refer="ServiceIdPK">
+			<xs:selector xpath="ServiceProfiles/ServiceProfile/ProfileServiceRef"/>
+			<xs:field xpath="@serviceRefId"/>
+		</xs:keyref>
+	</xs:element>
+	<xs:complexType name="ListenerType">
+		<xs:sequence>
+			<xs:element name="Protocols" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>TODO: Proper protocol definitions based on callType.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="callType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="WithinSameProcess"/>
+					<xs:enumeration value="InterprocessWithinSameMachine"/>
+					<xs:enumeration value="Network"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="listenerAddress">
+			<xs:annotation>
+				<xs:documentation>TODO: Proper address design based on callType and/or multicast (any sense in this?) or multireceiver.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ListenersType">
+		<xs:sequence>
+			<xs:element name="Listener" type="ListenerType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ParameterType">
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="logicalDataType" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="MethodType">
+		<xs:sequence>
+			<xs:element name="Parameter" type="ParameterType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="returnValueType" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="MethodsType">
+		<xs:sequence>
+			<xs:element name="Method" type="MethodType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceType">
+		<xs:sequence>
+			<xs:element name="Listeners" type="ListenersType"/>
+			<xs:element name="Interfaces" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>TBD: Do we have unique independent services (that are profile-grouped) rather than having interfaces within each larger service.
+
+For proper modularity the profile-grouped services give more flexibility.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Methods" type="MethodsType"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="serviceId" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Universally unique identifier for certain servicespecification.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ServicesType">
+		<xs:sequence>
+			<xs:element name="Service" type="ServiceType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProfileServiceRefType">
+		<xs:attribute name="serviceRefId" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceProfileType">
+		<xs:sequence>
+			<xs:element name="ProfileServiceRef" type="ProfileServiceRefType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceProfilesType">
+		<xs:sequence>
+			<xs:element name="ServiceProfile" type="ServiceProfileType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InteropAbstractionType">
+		<xs:sequence>
+			<xs:element name="Services" type="ServicesType"/>
+			<xs:element name="ServiceProfiles" type="ServiceProfilesType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>TBD: Likely having unique independent services that are bound together by profiles.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
