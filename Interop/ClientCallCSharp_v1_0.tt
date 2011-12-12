@@ -1,0 +1,87 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".designer.cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Xml.dll" #>
+<#@ Assembly Name="System.Xml.Linq.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ include file="..\..\abscommon\CommonInclude\Common\CommonCodeblocks.ttinclude" #>
+<#@ include file="Interop_v1_0.ttinclude" #>
+<#   
+	// Set abstraction specific type and single file specific extension
+	TransformGenerator<InteropAbstractionType>(GenerateRoot, ".designer.cs");	
+#>
+<#+ 
+	void SetCurrentAbstraction(object abs)
+	{
+		CurrentAbstraction = (InteropAbstractionType) abs;
+	}
+	
+	InteropAbstractionType CurrentAbstraction;
+	
+	void GenerateRoot()
+	{
+		GenerateAbstraction(CurrentAbstraction);
+	}
+	
+	void GenerateAbstraction(InteropAbstractionType abstraction)
+	{
+		
+		#>
+		// Import and using statements go here
+		using System;
+		<#+
+		foreach(var service in abstraction.Services)
+			GenerateService(service);
+	}	
+	
+	void GenerateService(ServiceType service)
+	{
+		string serviceCallProxyName = service.name + "CallerProxy";
+		#>
+		public class <#= serviceCallProxyName #>
+		{
+		<#+
+		foreach(MethodType method in service.Methods)
+			GenerateMethod(method);
+		#>
+		}
+		<#+
+	}
+	
+	string getParameterString(ParameterType[] parameters, bool namesOnly)
+	{
+		if(parameters == null || parameters.Length == 0)
+			return "";
+		string[] paramArray;
+		if(namesOnly)
+			paramArray = parameters.Select(par => par.name + ": " + par.name ).ToArray();
+		else
+			paramArray = parameters.Select(par => par.logicalDataType + " " + par.name).ToArray();
+		return String.Join(", ", paramArray);
+	}
+	
+	void GenerateMethod(MethodType method)
+	{
+		string returnType = String.IsNullOrEmpty(method.returnValueType) ? "void" : method.returnValueType;
+		string parameterDefString = getParameterString(method.Parameter, false);
+		string parameterCallString = getParameterString(method.Parameter, true);
+		string methodName = method.name;
+		#>
+		public static <#= returnType #> <#= methodName #>(<#= parameterDefString #>)
+		{
+			// TODO: Code to call the service to reach (possibly autodiscovered) listener
+			// Currently: Manually implemented
+			return ManualImplementation.<#= methodName #>(<#= parameterCallString #>);
+		}
+		<#+
+	}
+#>

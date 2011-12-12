@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>994fae55-04e0-4d89-97df-a69dc58e30d9</ProjectGuid>
+    <ProjectGuid>{BFFE1DBB-2F40-4464-A3C2-C82E7DD52DFF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InteropABS</RootNamespace>
@@ -40,8 +40,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Interop\ClientCallCSharp_v1_0.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClientCallCSharp_v1_0.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Interop\ServiceInprocListenerCSharp_v1_0.designer.cs">
+      <DependentUpon>ServiceInprocListenerCSharp_v1_0.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Interop\Interop_v1_0_namespace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Options.xml" />
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Interop\Content_v1_0\Interop_v1_0.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Interop_v1_0.xsd</DependentUpon>
+    </None>
+    <None Include="Interop\Content_v1_0\Interop_v1_0.xsd">
+      <SubType>Designer</SubType>
+      <Generator>T4ScriptFileGenerator</Generator>
+      <LastGenOutput>Interop_v1_0.tt</LastGenOutput>
+    </None>
+    <None Include="Interop\ClientCallCSharp_v1_0.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ClientCallCSharp_v1_0.designer.cs</LastGenOutput>
+    </None>
+    <None Include="Interop\ServiceInprocListenerCSharp_v1_0.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ServiceInprocListenerCSharp_v1_0.designer.cs</LastGenOutput>
+    </None>
+    <None Include="Interop\Interop_v1_0.ttinclude" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

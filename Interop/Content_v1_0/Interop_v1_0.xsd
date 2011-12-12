@@ -46,6 +46,7 @@
 	<xs:complexType name="ParameterType">
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="logicalDataType" type="xs:string" use="required"/>
+		<xs:attribute name="designDesc" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MethodType">
 		<xs:sequence>
@@ -53,6 +54,7 @@
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="returnValueType" type="xs:string"/>
+		<xs:attribute name="designDesc" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MethodsType">
 		<xs:sequence>
@@ -77,6 +79,7 @@ For proper modularity the profile-grouped services give more flexibility.</xs:do
 				<xs:documentation>Universally unique identifier for certain servicespecification.</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="designDesc" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ServicesType">
 		<xs:sequence>
